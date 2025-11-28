@@ -10,7 +10,7 @@ using Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 //adding support for several secret sources and database sources
 //to use either user secrets or azure key vault depending on UseAzureKeyVault tag in appsettings.json
