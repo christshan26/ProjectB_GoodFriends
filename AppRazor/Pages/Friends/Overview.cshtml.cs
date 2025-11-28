@@ -13,10 +13,10 @@ namespace MyApp.Namespace
 
         public async Task<IActionResult> OnGet()
         {
-            var addresses = await _addressesService.ReadAddressesAsync(true, false, "Norway", 0, 10);
+            var addresses = await _addressesService.ReadAddressesAsync(true, false, "Denmark", 0, 10);
             var info = await _adminService.GuestInfoAsync();
 
-            CountryInfo = info.Item.Friends.Where(f => f.Country == "Norway");
+            CountryInfo = info.Item.Friends.Where(f => f.Country == "Denmark");
             return Page();
         }
 
