@@ -8,23 +8,35 @@ namespace AppRazor.Pages;
 
 public class IndexModel : PageModel
 {
-        private readonly IAddressesService _addressesService;
-        private readonly IAdminService _adminService;
-        public IEnumerable<Models.DTO.GstUsrInfoFriendsDto>? CountryInfo;
-        
+    private readonly ILogger<IndexModel> _logger;
+    private readonly IAdminService _adminService;
 
-        public async Task<IActionResult> OnGet()
+    public int AddressCount { get; set; }
+    public int FriendCount { get; set; }
+    public int PetCount { get; set; }
+    public int QuoteCount { get; set; }
+
+    public IndexModel(ILogger<IndexModel> logger, IAdminService adminService)
+    {
+        _logger = logger;
+        _adminService = adminService;
+    }
+
+    public async Task<IActionResult> OnGet()
+    {
+        try
         {
-            var addresses = await _addressesService.ReadAddressesAsync(true, false, "Denmark", 0, 10);
             var info = await _adminService.GuestInfoAsync();
-
-            CountryInfo = info.Item.Friends.Where(f => f.Country == "Denmark");
-            return Page();
+            AddressCount = info.Item.Db.NrSeededAddresses + info.Item.Db.NrUnseededAddresses;
+            FriendCount = info.Item.Db.NrSeededFriends + info.Item.Db.NrUnseededFriends;
+            PetCount = info.Item.Db.NrSeededPets + info.Item.Db.NrUnseededPets;
+            QuoteCount = info.Item.Db.NrSeededQuotes + info.Item.Db.NrUnseededQuotes;
         }
-
-        public IndexModel(IAddressesService addressesService, IAdminService adminService)
+        catch (Exception ex)
         {
-            _addressesService = addressesService;
-            _adminService = adminService;
+            _logger.LogError(ex, "Error in guest info retrieval");
+            return StatusCode(500, "Internal server error");
         }
+        return Page();
+    }
 }
