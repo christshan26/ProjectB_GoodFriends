@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Models.Interfaces;
 using Services.Interfaces;
 
-namespace MyApp.Namespace
+namespace AppRazor.Pages.Friends
 {
     public class OverviewModel : PageModel
     {
