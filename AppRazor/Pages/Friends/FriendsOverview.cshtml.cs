@@ -5,7 +5,7 @@ using Services.Interfaces;
 
 namespace AppRazor.Pages.Friends
 {
-    public class OverviewModel : PageModel
+    public class FriendsOverviewModel : PageModel
     {
         private readonly IAdminService _adminService;
         public IEnumerable<Models.DTO.GstUsrInfoFriendsDto>? CountryInfo;
@@ -20,7 +20,7 @@ namespace AppRazor.Pages.Friends
             return Page();
         }
 
-        public OverviewModel(IAdminService adminService)
+        public FriendsOverviewModel(IAdminService adminService)
         {
             _adminService = adminService;
         }
