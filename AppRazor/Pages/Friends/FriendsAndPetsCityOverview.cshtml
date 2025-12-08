@@ -1,36 +1,32 @@
 ﻿@page
-@using Microsoft.EntityFrameworkCore.Metadata.Internal
-@model AppRazor.Pages.Friends.FriendsAndPetsOverviewModel
+@model AppRazor.Pages.Friends.FriendsAndPetsCityOverviewModel
 @{
 }
 
 <div class="container px-4 py-4" id="webapi-info">
-    <h2 class="pb-2 border-bottom">Friends and Pets per Country</h2>
-    <p>Below you see an overview of the Friends and Pets for each country. To see the overview on a City level, click the button below the Country. </p>
+    <h2 class="pb-2 border-bottom">Friends and Pets per City</h2>
+    <p>Below you see an overview of the Friends and Pets for each City in @Model.CountryInfo.FirstOrDefault()?.Country</p>
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
 
-        @{foreach (var item in Model.CountryInfo)
+        @{foreach (var item in Model.CityInfo.Where(c => c.Country == Model.CountryInfo.FirstOrDefault()?.Country))
             {
-                var petInfo = Model.PetsInfo?.FirstOrDefault(p => p.Country == item.Country);
+                var petInfo = Model.PetsInfo?.FirstOrDefault(p => p.City == item.City);
                 <div class="col d-flex align-items-start">
                     <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
                         <use xlink:href="#globe2" />
                     </svg>
                     <div>
-                        <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">@(item.Country)</h3>
-                        <p>@item.NrFriends friends</p>
+                        <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">@(item.City)</h3>
+                        <p>@item.NrFriends  @if(item.NrFriends == 1) { <text>friend</text> } else { <text>friends</text> }</p>
                         @if (petInfo != null)
                         {
-                            <p>@petInfo.NrPets pets</p>
+                            <p>@petInfo.NrPets @if(petInfo.NrPets == 1) { <text>pet</text> } else { <text>pets</text> }</p>
                         }
                         else
                         {
                             <p>0 pets</p>
                         }
-                        <a asp-page="/Friends/FriendsAndPetsCityOverview" asp-route-country="@(item.Country)" class="btn btn-primary">
-                            See details
-                        </a>
                     </div>
                 </div>
             }
