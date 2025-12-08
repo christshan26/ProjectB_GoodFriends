@@ -33,7 +33,9 @@
                     <!-- This is where selected item id will be stored -->
                     <input type="hidden" name="friendId" data-seido-selected-item-id-target />
 
-                    <div class="col-md-10 themed-grid-head-col">Friend Name</div>
+                    <div class="col-md-4 themed-grid-head-col">Friend Name</div>
+                    <div class="col-md-3 themed-grid-head-col">Country</div>
+                    <div class="col-md-3 themed-grid-head-col">City</div>
                     <div class="col-md-2 themed-grid-head-col">
                         <a href="~/Members/EditFriend" class="btn btn-success btn-sm m-1" type="button">New</a>
                     </div>
@@ -45,9 +47,19 @@
                     {
                         @foreach (var item in Model.FriendsList)
                         {
-                            <div class="col-md-10 themed-grid-col">
+                            <div class="col-md-4 themed-grid-col">
                                 <a href="~/ViewFriend?id=@item.FriendId">
                                     @item.FirstName @item.LastName
+                                </a>
+                            </div>
+                            <div class="col-md-3 themed-grid-col">
+                                <a href="~/ViewFriend?id=@item.FriendId">
+                                    @(item.Address?.Country ?? "No country")
+                                </a>
+                            </div>
+                            <div class="col-md-3 themed-grid-col">
+                                <a href="~/ViewFriend?id=@item.FriendId">
+                                    @(item.Address?.City ?? "No city")
                                 </a>
                             </div>
                             <div class="col-md-2 themed-grid-col">
