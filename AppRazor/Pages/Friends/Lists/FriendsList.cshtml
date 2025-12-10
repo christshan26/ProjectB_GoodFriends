@@ -20,8 +20,8 @@
                     <!-- Search filter-->
                     <div class="row mb-2 text-center">
                         <div class="col-md-6 ">
-                            <input asp-for="SearchFilter" class="form-control" type="search" placeholder="Search"
-                                aria-label="Search by Name, Country or City">
+                            <input asp-for="SearchFilter" class="form-control" type="search" placeholder="Search by Name, Country or City"
+                                aria-label="Search">
                         </div>
                         <div class="col-md-2 ">
                             <button asp-page-handler="Search" class="btn btn-outline-success"
@@ -48,17 +48,17 @@
                         @foreach (var item in Model.FriendsList)
                         {
                             <div class="col-md-4 themed-grid-col">
-                                <a href="~/ViewFriend?id=@item.FriendId">
+                                <a href="~/Friends/Detailview/ViewFriend?id=@item.FriendId">
                                     @item.FirstName @item.LastName
                                 </a>
                             </div>
                             <div class="col-md-3 themed-grid-col">
-                                <a href="~/ViewFriend?id=@item.FriendId">
+                                <a href="~/Friends/Detailview/ViewFriend?id=@item.FriendId">
                                     @(item.Address?.Country ?? "No country")
                                 </a>
                             </div>
                             <div class="col-md-3 themed-grid-col">
-                                <a href="~/ViewFriend?id=@item.FriendId">
+                                <a href="~/Friends/Detailview/ViewFriend?id=@item.FriendId">
                                     @(item.Address?.City ?? "No city")
                                 </a>
                             </div>
