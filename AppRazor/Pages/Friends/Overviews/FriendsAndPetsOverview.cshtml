@@ -2,11 +2,13 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @model AppRazor.Pages.Friends.Overviews.FriendsAndPetsOverviewModel
 @{
+    ViewData["Title"] = "Friends and Pets Overview";
 }
 
 <div class="container px-4 py-4" id="webapi-info">
     <h2 class="pb-2 border-bottom">Friends and Pets per Country</h2>
-    <p>Below you see an overview of the Friends and Pets for each country. To see the overview on a City level, click the button below the Country. </p>
+    <p>Below you see an overview of the Friends and Pets for each country.</p>
+    <h4>To see the overview on a City level, click the button below the Country.</h4>
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
 
