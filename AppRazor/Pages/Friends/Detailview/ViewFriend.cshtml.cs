@@ -10,7 +10,9 @@ namespace AppRazor.Pages.Friends.Detailview
     public class ViewFriendModel : PageModel
     {
         private readonly IFriendsService _friendsService = null;
+        private readonly IAddressesService _addressesService = null;
         public IFriend Friend { get; set; }
+        public IAddress Address { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -21,9 +23,10 @@ namespace AppRazor.Pages.Friends.Detailview
         }
     
 
-        public ViewFriendModel(IFriendsService friendsService)
+        public ViewFriendModel(IFriendsService friendsService, IAddressesService addressesService)
         {
             _friendsService = friendsService;
+            _addressesService = addressesService;
         }
     }
 }

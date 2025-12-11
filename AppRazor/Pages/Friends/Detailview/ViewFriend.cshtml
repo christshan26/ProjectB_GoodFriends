@@ -37,6 +37,29 @@
                         <input type="text" class="form-control" id="city" value="@(Model.Friend.Address?.City ?? "No City")" readonly>
                     </div>
                 </div>
+
+                @if (Model.Friend.Address != null)
+                {
+                    <div class="row g-3 mt-3">
+                        <div class="col-sm-6">
+                            <label for="street" class="form-label">Street</label>
+                            <input type="text" class="form-control" id="street" value="@Model.Friend.Address.StreetAddress" readonly>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="zipCode" class="form-label">Zip Code</label>
+                            <input type="text" class="form-control" id="zipCode" value="@Model.Friend.Address.ZipCode" readonly>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row g-1">
+                        <h3 class="pb-2">Address</h3>
+                        <p class="text-muted">No address registered</p>
+                    </div>
+                }
+
                 @if (Model.Friend.Pets != null && Model.Friend.Pets.Any())
                 {
                     <div class="row g-1">
