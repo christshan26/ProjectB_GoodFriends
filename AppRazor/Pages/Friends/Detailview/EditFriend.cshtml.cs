@@ -20,6 +20,16 @@ namespace AppRazor.Pages.Friends.Detailview
         public IFriend Friend { get; set; }
         public IAddress Address { get; set; }
 
+        [BindProperty]
+        public FriendIM FriendInput { get; set; }
+
+        [BindProperty]
+        public string PageHeader { get; set; }
+
+        public List<SelectListItem> AnimalKinds { get; set;} = new List<SelectListItem>().PopulateSelectList<AnimalKind>();
+
+        public ModelValidationResult ValidationResult { get; set; } = new ModelValidationResult(false, null, null);
+
         public async Task<IActionResult> OnGet()
         {
             Guid _friendId = Guid.Parse(Request.Query["id"]);
@@ -27,13 +37,55 @@ namespace AppRazor.Pages.Friends.Detailview
 
             return Page();
         }
-    
 
-        public EditFriendModel(IFriendsService friendsService, IAddressesService addressesService)
+        #region InputModel Quotes and Pets saved to database
+        private async Task<IFriend> SaveQuotes()
         {
-            _friendsService = friendsService;
-            _addressesService = addressesService;
+            var deletedQuotes = FriendInput.Quotes.FindAll(q => (q.StatusIM == StatusIM.Deleted));
+            foreach (var item in deletedQuotes)
+            {
+                await _quotesService.DeleteQuoteAsync(item.QuoteId);
+            }
+
+            await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+
+            var newQuotes = FriendInput.Quotes.FindAll(q => (q.StatusIM == StatusIM.Inserted));
+            foreach (var item in newQuotes)
+            {
+                var cuDto = item.CreateCUdto();
+                cuDto.FriendsId = [FriendInput.FriendId];
+                await _quotesService.CreateQuoteAsync(cuDto);
+            }
+
+            var fr = await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+
+            var modifiedQuotes = FriendInput.Quotes.FindAll(q => (q.StatusIM == StatusIM.Modified));
+            foreach (var item in modifiedQuotes)
+            {
+                var model = fr.Item.Quotes.First(q => q.QuoteId == item.QuoteId);
+                model = item.UpdateModel(model);
+
+                await _quotesService.UpdateQuoteAsync(new QuoteCuDto(model));
+            }
+
+            return fr.Item;
         }
+
+        private async Task<IFriend> SavePets()
+        {
+            return null;
+        }
+        #endregion
+
+        #region Constructors
+        public EditFriendModel(IFriendsService f_service, IAddressesService a_service, IPetsService p_service, IQuotesService q_service)
+        {
+            _friendsService = f_service;
+            _addressesService = a_service;
+            _petsService = p_service;
+            _quotesService = q_service;
+        }
+        #endregion
 
         #region Input Models
         public enum StatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
