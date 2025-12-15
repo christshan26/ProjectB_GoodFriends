@@ -30,13 +30,161 @@ namespace AppRazor.Pages.Friends.Detailview
 
         public ModelValidationResult ValidationResult { get; set; } = new ModelValidationResult(false, null, null);
 
+        #region HTTP Requests
         public async Task<IActionResult> OnGet()
         {
-            Guid _friendId = Guid.Parse(Request.Query["id"]);
-            Friend = (await _friendsService.ReadFriendAsync(_friendId, false)).Item;
+            if (Guid.TryParse(Request.Query["id"], out Guid _friendId))
+            {
+                var fr = await _friendsService.ReadFriendAsync(_friendId, false);
+
+                FriendInput = new FriendIM(fr.Item);
+
+                PageHeader = $"Edit Friend: {fr.Item.FirstName} {fr.Item.LastName}";
+            }
+            else
+            {
+                FriendInput = new FriendIM();
+                FriendInput.StatusIM = StatusIM.Inserted;
+
+                PageHeader = "Create New Friend";
+            }
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPostDeleteQuotes(Guid friendId)
+        {
+            FriendInput.Quotes.First(q => q.QuoteId == friendId).StatusIM = StatusIM.Deleted;
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAddQuote()
+        {
+            string[] keys = { "FriendInput.NewQuote.QuoteText", "FriendInput.NewQuote.Author" };
+
+            if(!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            FriendInput.NewQuote.StatusIM = StatusIM.Inserted;
+            FriendInput.NewQuote.QuoteId = Guid.NewGuid();
+            FriendInput.Quotes.Add(new QuoteIM(FriendInput.NewQuote));
+            FriendInput.NewQuote = new QuoteIM();
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostEditQuote(Guid quoteId)
+        {
+            int idx = FriendInput.Quotes.FindIndex(q => q.QuoteId == quoteId);
+            string[] keys = { $"FriendInput.Quotes[{idx}].editQuoteText", $"FriendInput.Quotes[{idx}].editAuthor" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            var q = FriendInput.Quotes.First(q => q.QuoteId == quoteId);
+            if (q.StatusIM != StatusIM.Inserted)
+            {
+                q.StatusIM = StatusIM.Modified;
+            }
+
+            q.QuoteText = q.editQuoteText;
+            q.Author = q.editAuthor;
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostDeletePets(Guid petId)
+        {
+            FriendInput.Pets.First(p => p.PetId == petId).StatusIM = StatusIM.Deleted;
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAddPet()
+        {
+            string[] keys = { "FriendInput.NewPet.Name", "FriendInput.NewPet.Kind" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            FriendInput.NewPet.StatusIM = StatusIM.Inserted;
+            FriendInput.NewPet.PetId = Guid.NewGuid();
+            FriendInput.Pets.Add(new PetIM(FriendInput.NewPet));
+            FriendInput.NewPet = new PetIM();
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostEditPet(Guid petId)
+        {
+            int idx = FriendInput.Pets.FindIndex(p => p.PetId == petId);
+            string[] keys = { $"FriendInput.Pets[{idx}].editName", $"FriendInput.Pets[{idx}].editKind" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            var p = FriendInput.Pets.First(p => p.PetId == petId);
+            if (p.StatusIM != StatusIM.Inserted)
+            {
+                p.StatusIM = StatusIM.Modified;
+            }
+
+            p.Name = p.editName;
+            p.Kind = p.editKind;
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostUndo()
+        {
+            var fr = await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+            FriendInput = new FriendIM(fr.Item);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostSave()
+        {
+            string[] keys = { "FriendInput.FirstName", "FriendInput.LastName" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            if (FriendInput.StatusIM == StatusIM.Inserted)
+            {
+                var newFr = await _friendsService.CreateFriendAsync(FriendInput.CreateCUdto());
+                FriendInput.FriendId = newFr.Item.FriendId;
+            }
+
+            await SaveQuotes();
+            var fr = await SavePets();
+
+            fr = FriendInput.UpdateModel(fr);
+            await _friendsService.UpdateFriendAsync(new FriendCuDto(fr));
+
+            if(FriendInput.StatusIM == StatusIM.Inserted)
+            {
+                return Redirect($"/Friends/Lists/FriendsList");
+            }
+
+            return Redirect($"/Friends/Detailview/ViewFriend?id={FriendInput.FriendId}");
+        }
+        #endregion
 
         #region InputModel Quotes and Pets saved to database
         private async Task<IFriend> SaveQuotes()
@@ -73,7 +221,34 @@ namespace AppRazor.Pages.Friends.Detailview
 
         private async Task<IFriend> SavePets()
         {
-            return null;
+            var deletedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == StatusIM.Deleted));
+            foreach (var item in deletedPets)
+            {
+                await _petsService.DeletePetAsync(item.PetId);
+            }
+
+            await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+
+            var newPets = FriendInput.Pets.FindAll(p => (p.StatusIM == StatusIM.Inserted));
+            foreach (var item in newPets)
+            {
+                var cuDto = item.CreateCUdto();
+                cuDto.FriendId = FriendInput.FriendId;
+                await _petsService.CreatePetAsync(cuDto);
+            }
+
+            var fr = await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+
+            var modifiedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == StatusIM.Modified));
+            foreach (var item in modifiedPets)
+            {
+                var model = fr.Item.Pets.First(p => p.PetId == item.PetId);
+                model = item.UpdateModel(model);
+
+                await _petsService.UpdatePetAsync(new PetCuDto(model));
+            }
+            
+            return fr.Item;
         }
         #endregion
 
