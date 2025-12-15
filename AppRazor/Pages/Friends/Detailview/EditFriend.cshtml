@@ -5,26 +5,48 @@
 }
 
 <!-- Page edit-friend -->
-<div class="container px-4 py-4" id="view-group">
-    <h2 class="pb-2 border-bottom">
-    View details of a friend
-        <a href="~/Friends/Detailview/EditFriend?id=@Model.Friend.FriendId">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#edit" /></svg>
-        </a>
-    </h2>
-    <form class="needs-validation" novalidate>
+<div class="container px-4 py-4" id="edit-friend">
+    <form class="needs-validation" method="post" novalidate>
+        <h2 class="pb-2 border-bottom">
+            @Model.PageHeader
+            <button class="btn btn-primary-outline" type="submit" asp-page-handler="Save">
+                <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#save" /></svg>
+            </button>
+            <button class="btn btn-primary-outline" type="submit" asp-page-handler="Undo">
+                <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#undo" /></svg>
+            </button>
+        </h2>
+
         <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
             <div class="col-md-7 col-lg-10">
 
+                <input asp-for="PageHeader" value="@Model.PageHeader" type="hidden" />
+
+                @if (Model.ValidationResult.HasErrors)
+                {
+                    <div class="row g-3">
+                        @foreach (var item in Model.ValidationResult.ErrorMsgs)
+                        {
+                            <span class="alert alert-danger" role="alert">
+                                @item
+                            </span>
+                        }
+                    </div>
+                }
+
                 <div class="row g-3 mb-2">
+
+                    <input asp-for="FriendInput.FriendId" type="hidden" />
+                    <input asp-for="FriendInput.StatusIM" type="hidden" />
+
                     <div class="col-sm-6">
                         <label for="friendName" class="form-label">First name</label>
-                        <input type="text" class="form-control" id="friendName" value="@Model.Friend.FirstName" readonly>
+                        <input type="text" class="form-control" id="friendName" asp-for="FriendInput.FirstName">
                     </div>
 
                     <div class="col-sm-6">
                         <label for="lastName" class="form-label">Last name</label>
-                        <input type="text" class="form-control" id="lastName" value="@Model.Friend.LastName" readonly>
+                        <input type="text" class="form-control" id="lastName" asp-for="FriendInput.LastName">
                     </div>
 
                     <div class="col-sm-6">
@@ -49,7 +71,7 @@
 
                 </div>
 
-
+                <!-- Continue -->
 
                 @if (Model.Friend.Pets != null && Model.Friend.Pets.Any())
                 {
@@ -106,3 +128,9 @@
         </div>
     </form>
 </div>
+
+@section script
+{
+    <!-- -->
+    <partial name="_ValidationScriptsPartial" />
+}
