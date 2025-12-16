@@ -1,4 +1,14 @@
 ﻿<!DOCTYPE html>
+@using Configuration.Options
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.Extensions.Options
+@using Models;
+@using Configuration;
+@inject IConfiguration configuration;
+@inject IOptions<EnvironmentOptions> envOptions;
+
+@{}
+
 <html lang="en">
 
 <head>
@@ -123,9 +133,12 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/script/seido/modals.js" asp-append-verison="true"></script>
+    <script src="~/script/seido/select-list-items.js" asp-append-verison="true"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("script", required: false)
 </body>
 
 </html>

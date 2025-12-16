@@ -8,6 +8,7 @@ using Services;
 using Services.Interfaces;
 using AppRazor.SeidoHelpers;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AppRazor.Pages.Friends.Detailview
 {
@@ -26,7 +27,7 @@ namespace AppRazor.Pages.Friends.Detailview
         [BindProperty]
         public string PageHeader { get; set; }
 
-        public List<SelectListItem> AnimalKinds { get; set;} = new List<SelectListItem>().PopulateSelectList<AnimalKind>();
+        public List<SelectListItem> AnimalKind { get; set;} = new List<SelectListItem>().PopulateSelectList<AnimalKind>();
 
         public ModelValidationResult ValidationResult { get; set; } = new ModelValidationResult(false, null, null);
 
@@ -39,7 +40,7 @@ namespace AppRazor.Pages.Friends.Detailview
 
                 FriendInput = new FriendIM(fr.Item);
 
-                PageHeader = $"Edit Friend: {fr.Item.FirstName} {fr.Item.LastName}";
+                PageHeader = "Edit details for a friend";
             }
             else
             {
@@ -47,6 +48,39 @@ namespace AppRazor.Pages.Friends.Detailview
                 FriendInput.StatusIM = StatusIM.Inserted;
 
                 PageHeader = "Create New Friend";
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostEditAddress()
+        {
+            string[] keys = { "FriendInput.Address.StreetAddress", "FriendInput.Address.ZipCode", "FriendInput.Address.City", "FriendInput.Address.Country" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            if (FriendInput.Address.AddressId == null || FriendInput.Address.AddressId == Guid.Empty)
+            {
+                FriendInput.Address.StatusIM = StatusIM.Inserted;
+                FriendInput.Address.AddressId = Guid.NewGuid();
+            }
+            else if (FriendInput.Address.StatusIM != StatusIM.Inserted)
+            {
+                FriendInput.Address.StatusIM = StatusIM.Modified;
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostDeleteAddress()
+        {
+            if (FriendInput.Address.AddressId != null)
+            {
+                FriendInput.Address.StatusIM = StatusIM.Deleted;
             }
 
             return Page();
@@ -102,8 +136,11 @@ namespace AppRazor.Pages.Friends.Detailview
 
         public async Task<IActionResult> OnPostDeletePets(Guid petId)
         {
-            FriendInput.Pets.First(p => p.PetId == petId).StatusIM = StatusIM.Deleted;
-
+            var pet = FriendInput.Pets.FirstOrDefault(p => p.PetId == petId);
+            if (pet != null)
+            {
+                pet.StatusIM = StatusIM.Deleted;
+            }
             return Page();
         }
 
@@ -171,8 +208,9 @@ namespace AppRazor.Pages.Friends.Detailview
                 FriendInput.FriendId = newFr.Item.FriendId;
             }
 
-            await SaveQuotes();
-            var fr = await SavePets();
+            var fr = await SaveAddress();
+            fr = await SaveQuotes();
+            fr = await SavePets();
 
             fr = FriendInput.UpdateModel(fr);
             await _friendsService.UpdateFriendAsync(new FriendCuDto(fr));
@@ -187,6 +225,42 @@ namespace AppRazor.Pages.Friends.Detailview
         #endregion
 
         #region InputModel Quotes and Pets saved to database
+        private async Task<IFriend> SaveAddress()
+        {
+            var fr = await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+
+            if (FriendInput.Address.StatusIM == StatusIM.Deleted && FriendInput.Address.AddressId != null)
+            {
+                await _addressesService.DeleteAddressAsync(FriendInput.Address.AddressId.Value);
+
+                var friendDto = new FriendCuDto(fr.Item);
+                friendDto.AddressId = null;
+                await _friendsService.UpdateFriendAsync(friendDto);
+            }
+
+            if (FriendInput.Address.StatusIM == StatusIM.Inserted)
+            {
+                var newAddress = await _addressesService.CreateAddressAsync(FriendInput.Address.CreateCUdto());
+                FriendInput.Address.AddressId = newAddress.Item.AddressId;
+
+                var friendDto = new FriendCuDto(fr.Item);
+                friendDto.AddressId = newAddress.Item.AddressId;
+                await _friendsService.UpdateFriendAsync(friendDto);
+            }
+
+            fr = await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+
+            if (FriendInput.Address.StatusIM == StatusIM.Modified && FriendInput.Address.AddressId != null)
+            {
+                var model = fr.Item.Address;
+                model = FriendInput.Address.UpdateModel(model);
+
+                await _addressesService.UpdateAddressAsync(new AddressCuDto(model));
+            }
+
+            return fr.Item;
+        }
+
         private async Task<IFriend> SaveQuotes()
         {
             var deletedQuotes = FriendInput.Quotes.FindAll(q => (q.StatusIM == StatusIM.Deleted));
@@ -380,7 +454,7 @@ namespace AppRazor.Pages.Friends.Detailview
         public class AddressIM
         {
             public StatusIM StatusIM { get; set; }
-            public Guid AddressId { get; set; }
+            public Guid? AddressId { get; set; }
 
             [Required(ErrorMessage = "Street is required")]
             public string StreetAddress { get; set; }
@@ -393,8 +467,6 @@ namespace AppRazor.Pages.Friends.Detailview
 
             [Required(ErrorMessage = "Country is required")]
             public string Country { get; set; }
-
-            public List<FriendIM> Friends { get; set; } = new List<FriendIM>();
 
             public AddressIM() { }
 
@@ -416,13 +488,11 @@ namespace AppRazor.Pages.Friends.Detailview
                 ZipCode = model.ZipCode;
                 City = model.City;
                 Country = model.Country;
-
-                Friends = model.Friends?.Select(f => new FriendIM(f)).ToList();
             }
 
             public IAddress UpdateModel(IAddress model)
             {
-                model.AddressId = this.AddressId;
+                model.AddressId = this.AddressId ?? model.AddressId;
                 model.StreetAddress = this.StreetAddress;
                 model.ZipCode = this.ZipCode;
                 model.City = this.City;
@@ -438,8 +508,6 @@ namespace AppRazor.Pages.Friends.Detailview
                 City = this.City,
                 Country = this.Country
             };
-
-            public FriendIM NewFriend { get; set; } = new FriendIM();
         }
 
         public class FriendIM
@@ -453,10 +521,18 @@ namespace AppRazor.Pages.Friends.Detailview
             [Required(ErrorMessage = "Last name is required")]
             public string LastName { get; set; }
 
+            [Required(ErrorMessage = "Animal kind is required")]
+            public AnimalKind AnimalKind { get; set; }
+
+            public AddressIM Address { get; set; }
             public List<PetIM> Pets { get; set; } = new List<PetIM>();
             public List<QuoteIM> Quotes { get; set; } = new List<QuoteIM>();
 
-            public FriendIM() {}
+            public FriendIM()
+            {
+                Address = new AddressIM();
+            }
+        
 
             /*public FriendIM(FriendIM original)
             {
@@ -473,6 +549,7 @@ namespace AppRazor.Pages.Friends.Detailview
                 FirstName = model.FirstName;
                 LastName = model.LastName;
 
+                Address = model.Address != null ? new AddressIM(model.Address) : new AddressIM();
                 Pets = model.Pets?.Select(p => new PetIM(p)).ToList();
                 Quotes = model.Quotes?.Select(q => new QuoteIM(q)).ToList();
             }
