@@ -7,12 +7,12 @@
 @attribute [IgnoreAntiforgeryToken]
 
 <div class="container px-4 py-4" id="list-of-groups">
-    <h2 class="pb-2 border-bottom">List of Music bands</h2>
+    <h2 class="pb-2 border-bottom">List of Friends</h2>
 
     <p>Below are some of the friends in the database.</p>
     <p>The database contains @Model.NrOfFriends friends with the search criteria</p>
 
-    <form method="post" class="needs-validation" method="post" novalidate>
+    <form method="post" class="needs-validation" novalidate>
         <label class="form-check-label" for="useSeeds">Use seeded data</label>
         <input asp-for="UseSeeds" class="form-check-input" type="checkbox" id="useSeeds">
         <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
@@ -32,14 +32,12 @@
                 </div>
                 <div class="row mb-2 text-center">
                     <!-- This is where selected item id will be stored -->
-                    <input type="hidden" name="friendId" data-seido-selected-item-id-target />
+                    <input type="hidden" name="id" data-seido-selected-item-id-target />
 
                     <div class="col-md-4 themed-grid-head-col">Friend Name</div>
                     <div class="col-md-3 themed-grid-head-col">Country</div>
                     <div class="col-md-3 themed-grid-head-col">City</div>
-                    <div class="col-md-2 themed-grid-head-col">
-                        <a href="~/Members/EditFriend" class="btn btn-success btn-sm m-1" type="button">New</a>
-                    </div>
+                    <div class="col-md-2 themed-grid-head-col">Actions</div>
                 </div>
 
                 <div class="row mb-2 text-center">
@@ -64,7 +62,7 @@
                                 </a>
                             </div>
                             <div class="col-md-2 themed-grid-col">
-                                <a href="~/Members/EditFriend?id=@item.FriendId" class="btn btn-secondary btn-sm m-1"
+                                <a href="~/Friends/Detailview/EditFriend?id=@item.FriendId" class="btn btn-secondary btn-sm m-1"
                                     type="button">Edit</a>
 
                                 <!-- Button to trigger modal confirmation with modal in the form tag -->
@@ -129,3 +127,9 @@
         </div>
     </form>
 </div>
+
+@section script
+{
+    <!-- -->
+    <partial name="_ValidationScriptsPartial" />
+}
