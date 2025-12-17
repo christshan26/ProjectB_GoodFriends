@@ -208,6 +208,32 @@ namespace AppRazor.Pages.Friends.Detailview
                 FriendInput.FriendId = newFr.Item.FriendId;
             }
 
+            // Check if address has been modified
+            if (FriendInput.Address.StatusIM == StatusIM.Unchanged && FriendInput.Address.AddressId != null)
+            {
+                var existingFriend = await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
+                if (existingFriend.Item.Address != null)
+                {
+                    if (existingFriend.Item.Address.StreetAddress != FriendInput.Address.StreetAddress ||
+                        existingFriend.Item.Address.ZipCode != FriendInput.Address.ZipCode ||
+                        existingFriend.Item.Address.City != FriendInput.Address.City ||
+                        existingFriend.Item.Address.Country != FriendInput.Address.Country)
+                    {
+                        FriendInput.Address.StatusIM = StatusIM.Modified;
+                    }
+                }
+            }
+            // Check if address fields are filled but no AddressId exists (new address)
+            else if (FriendInput.Address.AddressId == null && 
+                    (!string.IsNullOrEmpty(FriendInput.Address.StreetAddress) ||
+                    !string.IsNullOrEmpty(FriendInput.Address.City) ||
+                    !string.IsNullOrEmpty(FriendInput.Address.Country) ||
+                    FriendInput.Address.ZipCode > 0))
+            {
+                FriendInput.Address.StatusIM = StatusIM.Inserted;
+                FriendInput.Address.AddressId = Guid.NewGuid();
+            }
+
             var fr = await SaveAddress();
             fr = await SaveQuotes();
             fr = await SavePets();
@@ -571,6 +597,7 @@ namespace AppRazor.Pages.Friends.Detailview
 
             public PetIM NewPet { get; set; } = new PetIM();
             public QuoteIM NewQuote { get; set; } = new QuoteIM();
+            public AddressIM NewAddress { get; set; } = new AddressIM();
         }
         #endregion
     }
