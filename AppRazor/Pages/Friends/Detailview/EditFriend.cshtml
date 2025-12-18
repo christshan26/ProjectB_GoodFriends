@@ -57,21 +57,25 @@
                     <div class="col-sm-6">
                         <label for="country" class="form-label">Country</label>
                         <input type="text" class="form-control" id="country" asp-for="FriendInput.Address.Country">
+                        <span asp-validation-for="FriendInput.Address.Country" class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="city" class="form-label">City</label>
                         <input type="text" class="form-control" id="city" asp-for="FriendInput.Address.City">
+                        <span asp-validation-for="FriendInput.Address.City" class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="street" class="form-label">Street</label>
                         <input type="text" class="form-control" id="street" asp-for="FriendInput.Address.StreetAddress">
+                        <span asp-validation-for="FriendInput.Address.StreetAddress" class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="zipCode" class="form-label">Zip Code</label>
                         <input type="number" class="form-control" id="zipCode" asp-for="FriendInput.Address.ZipCode">
+                        <span asp-validation-for="FriendInput.Address.ZipCode" class="invalid-feedback"></span>
                     </div>
 
                 </div>
