@@ -159,8 +159,9 @@
                 </div>
 
                 <div class="row g-1">
-                    <input type="hidden" name="quotesId" data-seido-selected-item-id-target />
                     <h3 class="pb-2">Quotes</h3>
+
+                    <input type="hidden" name="quotesId" data-seido-selected-item-id-target />
 
                     <div class="row mb-2 text-center">
                         <div class="col-md-8 themed-grid-head-col">Text</div>
@@ -207,8 +208,8 @@
                                         data-seido-selected-item-id="@Model.FriendInput.Quotes[k].QuoteId">
                                     Edit
                                 </button>
-                                <button type="submit" asp-page-handler="DeleteQuote" class="btn btn-danger btn-sm m-1"
-                                        data-seido-selected-item-id="@Model.FriendInput.Quotes[k].QuoteId">
+
+                                <button type="submit" asp-page-handler="DeleteQuotes" asp-route-quoteId="@Model.FriendInput.Quotes[k].QuoteId" class="btn btn-danger btn-sm m-1" data-seido-selected-item-id="@Model.FriendInput.Quotes[k].QuoteId">
                                     Del
                                 </button>
                             </div>
@@ -218,13 +219,15 @@
                             <div class="col-md-8 themed-grid-col">
                                 <input asp-for="FriendInput.Quotes[k].editQuoteText" class="form-control" value="@Model.FriendInput.Quotes[k].editQuoteText" />
                                 <span asp-validation-for="FriendInput.Quotes[k].editQuoteText" class="invalid-feedback"></span>
+                                <label for="FriendInput.Quotes[k].editQuoteText">Text</label>
                             </div>
                             <div class="col-md-2 themed-grid-col">
                                 <input asp-for="FriendInput.Quotes[k].editAuthor" class="form-control" value="@Model.FriendInput.Quotes[k].editAuthor" />
                                 <span asp-validation-for="FriendInput.Quotes[k].editAuthor" class="invalid-feedback"></span>
+                                <label for="FriendInput.Quotes[k].editAuthor">Author</label>
                             </div>
                             <div class="col-md-2 themed-grid-col">
-                                <button type="submit" asp-page-handler="EditQuote" class="btn btn-success btn-sm m-1">
+                                <button type="submit" asp-page-handler="EditQuote" asp-route-quoteId="@Model.FriendInput.Quotes[k].QuoteId" class="btn btn-success btn-sm m-1">
                                     Ok
                                 </button>
                             </div>

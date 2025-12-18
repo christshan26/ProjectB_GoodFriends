@@ -86,10 +86,13 @@ namespace AppRazor.Pages.Friends.Detailview
             return Page();
         }
 
-        public async Task<IActionResult> OnPostDeleteQuotes(Guid friendId)
+        public async Task<IActionResult> OnPostDeleteQuotes(Guid quoteId)
         {
-            FriendInput.Quotes.First(q => q.QuoteId == friendId).StatusIM = StatusIM.Deleted;
-
+            var quote = FriendInput.Quotes.FirstOrDefault(q => q.QuoteId == quoteId);
+            if (quote != null)
+            {
+                quote.StatusIM = StatusIM.Deleted;
+            }
             return Page();
         }
 
