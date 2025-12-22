@@ -1,59 +1,162 @@
 ﻿@page
 @model AppRazor.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="container px-4 py-4" id="home">
-    <div class="bg-body-tertiary p-5 rounded">
-        <h1 class="display-5 fw-normal">Welcome to the Friends database</h1>
-        <p class="fs-5">Manage your friends easily with this application.<br>Add-edit-remove friends, pets, addresses,
-            and quotes.</p>
-        <p>By Christoffer Hansson</p>
-    </div>
-</div>
-
-<!-- Page web-api-info -->
-<div class="container px-4 py-4" id="webapi-info">
-    <h2 class="pb-2 border-bottom">WebApi info</h2>
-    <p>Below you see an overview of the content presented by the WebApi.</p>
-
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                <use xlink:href="#home" />
-            </svg>
-            <div>
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Addresses</h3>
-                <p>@Model.AddressCount</p>
+<!-- Hero Section -->
+<section class="mb-5 fade-in">
+    <div class="bg-body-tertiary p-5 rounded shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold text-primary mb-3">Welcome to GoodFriends</h1>
+                <p class="lead mb-3">
+                    Manage your friends easily with this comprehensive application. 
+                    Edit, and remove friends, pets, addresses, and quotes.
+                </p>
+                <p class="text-muted">
+                    <small>Created by Christoffer Hansson</small>
+                </p>
+                <div class="d-grid gap-2 d-md-flex mt-4">
+                    <a asp-page="/Friends/Overviews/FriendsOverview" class="btn btn-primary btn-lg px-4 me-md-2">
+                        View Friends
+                    </a>
+                    <a asp-page="/Admin/Seed" class="btn btn-outline-secondary btn-lg px-4">
+                        Admin Panel
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                <use xlink:href="#person-raised-hand" />
-            </svg>
-            <div>
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Friends</h3>
-                <p>@Model.FriendCount</p>
-            </div>
-        </div>
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                <use xlink:href="#heart-fill" />
-            </svg>
-            <div>
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Pets</h3>
-                <p>@Model.PetCount</p>
-            </div>
-        </div>
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                <use xlink:href="#chat-square-quote-fill" />
-            </svg>
-            <div>
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Quotes</h3>
-                <p>@Model.QuoteCount</p>
+            <div class="col-lg-4 d-none d-lg-block text-center">
+                <svg class="bi text-primary" width="200" height="200">
+                    <use xlink:href="#person-raised-hand" />
+                </svg>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Statistics Section -->
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 mb-0">Database Overview</h2>
+        <a asp-page="/Privacy" class="text-decoration-none">
+            <small>View API Documentation</small>
+        </a>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <svg class="bi text-primary" width="48" height="48">
+                            <use xlink:href="#home" />
+                        </svg>
+                    </div>
+                    <h3 class="h5 fw-bold mb-2">Addresses</h3>
+                    <p class="display-6 text-primary mb-0">@Model.AddressCount</p>
+                    <small class="text-muted">Total locations</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <svg class="bi text-success" width="48" height="48">
+                            <use xlink:href="#person-raised-hand" />
+                        </svg>
+                    </div>
+                    <h3 class="h5 fw-bold mb-2">Friends</h3>
+                    <p class="display-6 text-success mb-0">@Model.FriendCount</p>
+                    <small class="text-muted">Registered friends</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <svg class="bi text-danger" width="48" height="48">
+                            <use xlink:href="#heart-fill" />
+                        </svg>
+                    </div>
+                    <h3 class="h5 fw-bold mb-2">Pets</h3>
+                    <p class="display-6 text-danger mb-0">@Model.PetCount</p>
+                    <small class="text-muted">Beloved companions</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <svg class="bi text-info" width="48" height="48">
+                            <use xlink:href="#chat-square-quote-fill" />
+                        </svg>
+                    </div>
+                    <h3 class="h5 fw-bold mb-2">Quotes</h3>
+                    <p class="display-6 text-info mb-0">@Model.QuoteCount</p>
+                    <small class="text-muted">Memorable sayings</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="mb-5">
+    <h2 class="h3 mb-4">Key Features</h2>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <svg class="bi text-primary me-3" width="32" height="32">
+                        <use xlink:href="#edit" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold">Easy Management</h3>
+                    <p class="text-muted">
+                        Quickly edit, or remove friends and their information with an intuitive interface.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <svg class="bi text-success me-3" width="32" height="32">
+                        <use xlink:href="#globe2" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold">Location Tracking</h3>
+                    <p class="text-muted">
+                        Keep track of addresses and locations for all your friends and contacts.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <svg class="bi text-danger me-3" width="32" height="32">
+                        <use xlink:href="#heart-fill" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold">Pet Registry</h3>
+                    <p class="text-muted">
+                        Document and remember all the beloved pets that belong to your friends.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

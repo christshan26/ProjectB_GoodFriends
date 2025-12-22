@@ -1,5 +1,9 @@
+/* ===================================
+   Base Typography & Sizing
+   =================================== */
 html {
   font-size: 14px;
+  scroll-behavior: smooth;
 }
 
 @media (min-width: 768px) {
@@ -8,24 +12,259 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* ===================================
+   Focus States & Accessibility
+   =================================== */
+.btn:focus, 
+.btn:active:focus, 
+.btn-link.nav-link:focus, 
+.form-control:focus, 
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #0d6efd;
+  outline: none;
 }
 
-html {
+/* Skip to main content link */
+.visually-hidden-focusable:focus {
+  z-index: 1100;
+}
+
+/* ===================================
+   Layout Structure
+   =================================== */
+body {
+  background-color: #f8f9fa;
   position: relative;
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+/* ===================================
+   Header & Navigation
+   =================================== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  background-color: white;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+.navbar {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.navbar-brand:hover {
+  transform: translateY(-2px);
+}
+
+.nav-link {
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  color: #6c757d !important;
+}
+
+/* Dropdown button styled as nav-link */
+.nav-link.btn-link {
+  text-decoration: none;
+  border: none;
+  background: transparent;
+}
+
+.nav-link:hover {
+  background-color: #e9ecef;
+  color: #0a58ca !important;
+}
+
+.nav-link:focus {
+  background-color: #e9ecef;
+}
+
+.dropdown-menu {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  transition: all 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #e7f1ff;
+  color: #0a58ca;
+  padding-left: 1.25rem;
+}
+
+/* ===================================
+   Main Content
+   =================================== */
+main {
+  /* Flexbox will handle the height automatically */
+}
+
+/* ===================================
+   Cards & Containers
+   =================================== */
+.card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Rounded sections */
+.rounded {
+  border-radius: 0.5rem !important;
+}
+
+.bg-body-tertiary {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* ===================================
+   Footer
+   =================================== */
+footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+footer h5, footer h6 {
+  color: #495057;
+}
+
+footer a {
+  transition: all 0.2s ease;
+}
+
+footer a:hover {
+  color: #0d6efd !important;
+  padding-left: 0.25rem;
+}
+
+/* ===================================
+   Buttons
+   =================================== */
+.btn {
+  border-radius: 0.375rem;
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+  transform: translateY(-2px);
+  box-shadow: 0 0.25rem 0.5rem rgba(13, 110, 253, 0.25);
+}
+
+/* ===================================
+   Forms
+   =================================== */
+.form-floating > .form-control-plaintext::placeholder, 
+.form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+.form-floating > .form-control-plaintext:focus::placeholder, 
+.form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+.form-control {
+  border-radius: 0.375rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* ===================================
+   Icons & SVG
+   =================================== */
+.bi {
+  fill: currentColor;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ===================================
+   Spacing Utilities
+   =================================== */
+.section-spacing {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* ===================================
+   Responsive Adjustments
+   =================================== */
+@media (max-width: 767.98px) {
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+  
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+  }
+  
+  footer .row > div {
+    text-align: center;
+  }
+}
+
+/* ===================================
+   Animations
+   =================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease;
+}
+
+/* ===================================
+   Utilities
+   =================================== */
+.text-decoration-none:hover {
+  text-decoration: underline !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.border-bottom {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 }

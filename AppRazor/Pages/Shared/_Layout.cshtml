@@ -14,7 +14,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AppRazor</title>
+    <meta name="description" content="Friends Database Management - Manage your friends, pets, addresses, and quotes">
+    <title>@ViewData["Title"] - GoodFriends</title>
 
     <script type="importmap"></script>
 
@@ -30,8 +31,120 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- SVG icons for buttons etc-->
-    <svg xmlns="http://www.w3.org/2000/svg">
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="visually-hidden-focusable position-absolute top-0 start-0 p-2 bg-primary text-white text-decoration-none">
+        Skip to main content
+    </a>
+    
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" aria-label="Main navigation">
+            <div class="container-fluid px-3 px-lg-4">
+                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-page="/Index">
+                    <svg class="bi me-2" width="24" height="24">
+                        <use xlink:href="#person-raised-hand" />
+                    </svg>
+                    GoodFriends
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Index" aria-current="page">
+                                <svg class="bi me-1" width="16" height="16">
+                                    <use xlink:href="#home" />
+                                </svg>
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <button class="nav-link dropdown-toggle btn btn-link" id="friendsDropdown" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Friends
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="friendsDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Friends/Overviews/FriendsOverview">
+                                        Friends Overview
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Friends/Overviews/FriendsAndPetsOverview">
+                                        Friends & Pets Overview
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Friends/Lists/FriendsList">
+                                        Friends List
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Admin/Seed">
+                                Admin
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Privacy">
+                                Privacy
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content Area -->
+    <main id="main-content" class="flex-grow-1" role="main">
+        <div class="container-fluid px-3 px-lg-4 py-4">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light border-top mt-auto" role="contentinfo">
+        <div class="container-fluid px-3 px-lg-4">
+            <div class="row py-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="text-primary fw-bold">GoodFriends</h5>
+                    <p class="text-muted small mb-0">
+                        Manage your friends, pets, addresses, and quotes with ease.
+                    </p>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h6 class="text-uppercase fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a class="text-muted text-decoration-none" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="mb-2">
+                            <a class="text-muted text-decoration-none" asp-area="" asp-page="/Friends/Overviews/FriendsOverview">Friends</a>
+                        </li>
+                        <li class="mb-2">
+                            <a class="text-muted text-decoration-none" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="text-uppercase fw-bold mb-3">About</h6>
+                    <p class="text-muted small">
+                        Created by Christoffer Hansson<br>
+                        &copy; 2025 All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SVG Icon Definitions -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="home" viewBox="0 0 16 16">
             <path
                 d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
@@ -86,50 +199,6 @@
                 d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855q-.215.403-.395.872c.705.157 1.472.257 2.282.287zM4.249 3.539q.214-.577.481-1.078a7 7 0 0 1 .597-.933A7 7 0 0 0 3.051 3.05q.544.277 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9 9 0 0 1-1.565-.667A6.96 6.96 0 0 0 1.018 7.5zm1.4-2.741a12.3 12.3 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332M8.5 5.09V7.5h2.99a12.3 12.3 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.6 13.6 0 0 1 7.5 10.91V8.5zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741zm-3.282 3.696q.18.469.395.872c.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a7 7 0 0 1-.598-.933 9 9 0 0 1-.481-1.079 8.4 8.4 0 0 0-1.198.49 7 7 0 0 0 2.276 1.522zm-1.383-2.964A13.4 13.4 0 0 1 3.508 8.5h-2.49a6.96 6.96 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667m6.728 2.964a7 7 0 0 0 2.275-1.521 8.4 8.4 0 0 0-1.197-.49 9 9 0 0 1-.481 1.078 7 7 0 0 1-.597.933M8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855q.216-.403.395-.872A12.6 12.6 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.96 6.96 0 0 0 14.982 8.5h-2.49a13.4 13.4 0 0 1-.437 3.008M14.982 7.5a6.96 6.96 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008zM11.27 2.461q.266.502.482 1.078a8.4 8.4 0 0 0 1.196-.49 7 7 0 0 0-2.275-1.52c.218.283.418.597.597.932m-.488 1.343a8 8 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z" />
         </symbol>
     </svg>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">AppRazor</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Friends/Overviews/FriendsOverview">Friends overview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Friends/Overviews/FriendsAndPetsOverview">Friends and Pets overview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Friends/Lists/FriendsList">Friends list</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Seed">Seed Friends</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container flex-grow-1">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted mt-auto">
-        <div class="container">
-            &copy; 2025 - Christoffer Hansson - AppRazor - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
