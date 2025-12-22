@@ -5,30 +5,79 @@
 }
 
 <!-- Page Seed -->
-<div class="container px-4 py-4" id="seed">
-    <h2 class="pb-2 border-bottom">Seed friends</h2>
+<section class="mb-4">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-8">
+            <h1 class="h2 mb-2 text-primary fw-bold">Seed Database</h1>
+            <p class="text-muted mb-0">Generate sample data for testing and development</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <span class="badge bg-info fs-6 px-3 py-2">@Model.NrOfFriends Friends</span>
+        </div>
+    </div>
+</section>
 
-    <p>
-        Current the database contains @Model.NrOfFriends friends. Reseed according to the number of items you want.
-        You may optionally remove the old data before seeding.
-    </p>
-
-    <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
-        <div class="col-md-7 col-lg-8">
-            <form class="needs-validation" method="post" novalidate>
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label for="nrItems" class="form-label">Number of items</label>
-                        <input asp-for="NrOfItemsToSeed" type="text" class="form-control" id="nrItems" placeholder="" value="@Model.NrOfItemsToSeed">
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h3 class="h5 mb-0 fw-bold">
+                    <svg class="bi text-success me-2" width="20" height="20"><use xlink:href="#boombox" /></svg>
+                    Seed Configuration
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form class="needs-validation" method="post" novalidate>
+                    <div class="mb-4">
+                        <label for="nrItems" class="form-label fw-medium">Number of items to generate</label>
+                        <input asp-for="NrOfItemsToSeed" type="number" class="form-control form-control-lg" 
+                               id="nrItems" placeholder="Enter number" value="@Model.NrOfItemsToSeed">
                         <span asp-validation-for="NrOfItemsToSeed" class="invalid-feedback"></span>
-                        
-                        <label for="removeSeeds" class="form-check-label" >Clear before seeding</label>
-                        <input asp-for="RemoveSeeds" class="form-check-input" type="checkbox" id="removeSeeds">
-                        
+                        <small class="form-text text-muted">Specify how many friend records to create</small>
                     </div>
+
+                    <div class="form-check form-switch mb-4">
+                        <input asp-for="RemoveSeeds" class="form-check-input" type="checkbox" 
+                               id="removeSeeds">
+                        <label for="removeSeeds" class="form-check-label fw-medium">Clear existing data before seeding</label>
+                        <small class="form-text text-muted d-block mt-1">Warning: This will delete all current friends data</small>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-100" type="submit">
+                        <svg class="bi me-2" width="20" height="20"><use xlink:href="#boombox" /></svg>
+                        Generate Data
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body p-4">
+                <h3 class="h5 fw-bold mb-3">
+                    <svg class="bi text-info me-2" width="20" height="20"><use xlink:href="#globe2" /></svg>
+                    About Database Seeding
+                </h3>
+                <p class="mb-3">Database seeding allows you to populate your database with sample data for testing purposes.</p>
+                
+                <div class="alert alert-info border-0 mb-3">
+                    <h6 class="alert-heading fw-bold">What gets created?</h6>
+                    <ul class="mb-0 small">
+                        <li>Friends with names and details</li>
+                        <li>Associated addresses</li>
+                        <li>Pet records</li>
+                        <li>Quotes collection</li>
+                    </ul>
                 </div>
-                <button class="w-100 btn btn-primary btn-lg my-4" type="submit">Seed</button>
-            </form>
+
+                <div class="alert alert-warning border-0">
+                    <h6 class="alert-heading fw-bold">Important Note</h6>
+                    <p class="small mb-0">
+                        If you enable "Clear existing data", all current data will be permanently deleted before new data is created.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

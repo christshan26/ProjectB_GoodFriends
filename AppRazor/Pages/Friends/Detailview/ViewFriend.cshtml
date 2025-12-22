@@ -5,18 +5,29 @@
 }
 
 <!-- Page view-friend -->
-<div class="container px-4 py-4" id="view-friend">
-    <h2 class="pb-2 border-bottom">
-    View details of a friend
-        <a href="~/Friends/Detailview/EditFriend?id=@Model.Friend.FriendId">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#edit" /></svg>
+<section class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 mb-2 text-primary fw-bold">Friend Details</h1>
+            <p class="text-muted mb-0">View comprehensive information about this friend</p>
+        </div>
+        <a href="~/Friends/Detailview/EditFriend?id=@Model.Friend.FriendId" class="btn btn-primary">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#edit" /></svg>
+            Edit Friend
         </a>
-    </h2>
-    <form class="needs-validation" novalidate>
-        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
-            <div class="col-md-7 col-lg-10">
-
-                <div class="row g-3 mb-2">
+    </div>
+</section>
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h3 class="h5 mb-0 fw-bold">
+                    <svg class="bi text-primary me-2" width="20" height="20"><use xlink:href="#person-raised-hand" /></svg>
+                    Personal Information
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3">
                     <div class="col-sm-6">
                         <label for="friendName" class="form-label">First name</label>
                         <input type="text" class="form-control" id="friendName" value="@Model.Friend.FirstName" readonly>
@@ -46,63 +57,115 @@
                         <label for="zipCode" class="form-label">Zip Code</label>
                         <input type="text" class="form-control" id="zipCode" value="@(Model.Friend.Address?.ZipCode ?? 0)" readonly>
                     </div>
-
                 </div>
+            </div>
+        </div>
 
-
-
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h3 class="h5 mb-0 fw-bold">
+                    <svg class="bi text-danger me-2" width="20" height="20"><use xlink:href="#heart-fill" /></svg>
+                    Pets
+                </h3>
+            </div>
+            <div class="card-body p-4">
                 @if (Model.Friend.Pets != null && Model.Friend.Pets.Any())
                 {
-                    <div class="row g-1">
-                        <h3 class="pb-2">Pets</h3>
-
-                        <div class="row mb-2 text-center">
-                            <div class="col-md-10 themed-grid-head-col">Name</div>
-                            <div class="col-md-2 themed-grid-head-col">Kind</div>
-                        </div>
-                        @foreach (var item in Model.Friend.Pets)
-                        {
-                            <div class="row mb-2 text-center">
-                                <div class="col-md-10 themed-grid-col">@item.Name</div>
-                                <div class="col-md-2 themed-grid-col">@item.Kind</div>
-                            </div>
-                        }
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-muted">Name</th>
+                                    <th scope="col" class="text-muted">Kind</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Friend.Pets)
+                                {
+                                    <tr>
+                                        <td class="fw-medium">@item.Name</td>
+                                        <td><span class="badge bg-secondary">@item.Kind</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 }
                 else
                 {
-                    <div class="row g-1">
-                        <h3 class="pb-2">Pets</h3>
-                        <p class="text-muted">No pets registered</p>
-                    </div>
-                }
-
-                @if (Model.Friend.Quotes != null && Model.Friend.Quotes.Any())
-                {
-                    <div class="row g-1">
-                        <h3 class="pb-2">Quotes</h3>
-
-                        <div class="row mb-2 text-center">
-                            <div class="col-md-10 themed-grid-head-col">Text</div>
-                            <div class="col-md-2 themed-grid-head-col">Author</div>
-                        </div>
-                        @foreach (var item in Model.Friend.Quotes)
-                        {
-                            <div class="row mb-2 text-center">
-                                <div class="col-md-10 themed-grid-col">@item.QuoteText</div>
-                                <div class="col-md-2 themed-grid-col">@item.Author</div>
-                            </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="row g-1">
-                        <h3 class="pb-2">Quotes</h3>
-                        <p class="text-muted">No quotes registered</p>
+                    <div class="text-center py-4">
+                        <svg class="bi text-muted mb-3" width="48" height="48"><use xlink:href="#heart-fill" /></svg>
+                        <p class="text-muted mb-0">No pets registered</p>
                     </div>
                 }
             </div>
         </div>
-    </form>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h3 class="h5 mb-0 fw-bold">
+                    <svg class="bi text-info me-2" width="20" height="20"><use xlink:href="#chat-square-quote-fill" /></svg>
+                    Quotes
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Friend.Quotes != null && Model.Friend.Quotes.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-muted">Quote</th>
+                                    <th scope="col" class="text-muted">Author</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Friend.Quotes)
+                                {
+                                    <tr>
+                                        <td class="fst-italic">"@item.QuoteText"</td>
+                                        <td class="fw-medium">@item.Author</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <svg class="bi text-muted mb-3" width="48" height="48"><use xlink:href="#chat-square-quote-fill" /></svg>
+                        <p class="text-muted mb-0">No quotes registered</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+            <div class="card-body p-4">
+                <h4 class="h6 text-muted text-uppercase mb-3">Quick Actions</h4>
+                <div class="d-grid gap-2">
+                    <a href="~/Friends/Detailview/EditFriend?id=@Model.Friend.FriendId" class="btn btn-primary">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#edit" /></svg>
+                        Edit Friend
+                    </a>
+                    <a href="~/Friends/Lists/FriendsList" class="btn btn-outline-secondary">
+                        Back to List
+                    </a>
+                </div>
+                <hr class="my-4">
+                <h4 class="h6 text-muted text-uppercase mb-3">Summary</h4>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Pets:</span>
+                    <span class="fw-bold">@(Model.Friend.Pets?.Count ?? 0)</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Quotes:</span>
+                    <span class="fw-bold">@(Model.Friend.Quotes?.Count ?? 0)</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
