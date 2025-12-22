@@ -195,6 +195,13 @@ namespace AppRazor.Pages.Friends.Detailview
             return Page();
         }
 
+        /* Optional Undo that reverts all changes by reloading the page
+        public async Task<IActionResult> OnPostUndo()
+        {
+            return RedirectToPage(new { id = FriendInput.FriendId });
+        }
+        */
+
         public async Task<IActionResult> OnPostSave()
         {
             string[] keys = { "FriendInput.FirstName", "FriendInput.LastName" };
