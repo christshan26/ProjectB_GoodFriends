@@ -4,78 +4,75 @@
     ViewData["Title"] = "Friends and Pets per City";
 }
 
-<div class="container px-4 py-4" id="webapi-info">
-    <h2 class="pb-2 border-bottom">Friends and Pets per City</h2>
-    <p>Below you see an overview of the Friends and Pets for each City in @Model.CountryInfo.FirstOrDefault()?.Country</p>
+<!-- Breadcrumb Navigation -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Friends/Overviews/FriendsAndPetsOverview">Countries</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.CountryInfo.FirstOrDefault()?.Country</li>
+    </ol>
+</nav>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
+<!-- Hero Section -->
+<section class="mb-5">
+    <div class="bg-body-tertiary p-5 rounded shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-lg-9">
+                <h1 class="display-5 fw-bold text-primary mb-3">Friends and Pets per City</h1>
+                <p class="lead mb-2">
+                    Explore Friends and Pets across cities in <strong>@Model.CountryInfo.FirstOrDefault()?.Country</strong>
+                </p>
+                <div class="mt-3">
+                    <a asp-page="/Friends/Overviews/FriendsAndPetsOverview" class="btn btn-outline-secondary">
+                        <svg class="bi me-1" width="14" height="14"><use xlink:href="#globe2" /></svg>
+                        Back to Countries
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 d-none d-lg-block text-center">
+                <svg class="bi text-primary" width="120" height="120">
+                    <use xlink:href="#home" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
 
-        @{foreach (var item in Model.CityInfo.Where(c => c.Country == Model.CountryInfo.FirstOrDefault()?.Country))
-            {
-                var petInfo = Model.PetsInfo?.FirstOrDefault(p => p.City == item.City);
-                <div class="col d-flex align-items-start">
-                    <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                        <use xlink:href="#globe2" />
-                    </svg>
-                    <div>
-                        <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">@(item.City)</h3>
-                        <p>@item.NrFriends  @if(item.NrFriends == 1) { <text>friend</text> } else { <text>friends</text> }</p>
-                        @if (petInfo != null)
-                        {
-                            <p>@petInfo.NrPets @if(petInfo.NrPets == 1) { <text>pet</text> } else { <text>pets</text> }</p>
-                        }
-                        else
-                        {
-                            <p>0 pets</p>
-                        }
+<!-- Cities Grid -->
+<section class="mb-5">
+    <div class="row g-4">
+        @foreach (var item in Model.CityInfo.Where(c => c.Country == Model.CountryInfo.FirstOrDefault()?.Country))
+        {
+            var petInfo = Model.PetsInfo?.FirstOrDefault(p => p.City == item.City);
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <svg class="bi text-info" width="48" height="48">
+                                <use xlink:href="#home" />
+                            </svg>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3 text-body-emphasis">@item.City</h3>
+                        
+                        <div class="d-flex justify-content-around mb-3">
+                            <div>
+                                <svg class="bi text-success mb-1" width="24" height="24">
+                                    <use xlink:href="#person-raised-hand" />
+                                </svg>
+                                <p class="h4 text-success mb-0">@item.NrFriends</p>
+                                <small class="text-muted">@(item.NrFriends == 1 ? "friend" : "friends")</small>
+                            </div>
+                            <div>
+                                <svg class="bi text-danger mb-1" width="24" height="24">
+                                    <use xlink:href="#heart-fill" />
+                                </svg>
+                                <p class="h4 text-danger mb-0">@(petInfo?.NrPets ?? 0)</p>
+                                <small class="text-muted">@((petInfo?.NrPets ?? 0) == 1 ? "pet" : "pets")</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            }
+            </div>
         }
     </div>
-</div>
-
-
-<div class="container px-4 py-4 d-none" id="webapi-info">
-    <h2 class="pb-2 border-bottom">WebApi info</h2>
-    <p>Below you see an overview of the content presented by the WebApi. Click on the link to see details. </p>
-
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                <use xlink:href="#boombox" />
-            </svg>
-            <div>
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Music groups</h3>
-                <p>253 music groups</p>
-                <a href="#list-of-items" class="btn btn-primary">
-                    See details
-                </a>
-            </div>
-        </div>
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                <use xlink:href="#album" />
-            </svg>
-            <div>
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Albums</h3>
-                <p>1050 albums</p>
-                <a href="#list-of-items" class="btn btn-primary">
-                    See details
-                </a>
-            </div>
-        </div>
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                <use xlink:href="#artist" />
-            </svg>
-            <div>
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Artists</h3>
-                <p>135 Artists</p>
-                <a href="#list-of-items" class="btn btn-primary">
-                    See details
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
