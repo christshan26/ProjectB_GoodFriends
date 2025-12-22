@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Interfaces;
 using Models.DTO;
-using Services;
 using Services.Interfaces;
 using AppRazor.SeidoHelpers;
 using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AppRazor.Pages.Friends.Detailview
 {
@@ -218,7 +216,6 @@ namespace AppRazor.Pages.Friends.Detailview
                 FriendInput.FriendId = newFr.Item.FriendId;
             }
 
-            // Check if address has been modified
             if (FriendInput.Address.StatusIM == StatusIM.Unchanged && FriendInput.Address.AddressId != null)
             {
                 var existingFriend = await _friendsService.ReadFriendAsync(FriendInput.FriendId, false);
@@ -233,7 +230,6 @@ namespace AppRazor.Pages.Friends.Detailview
                     }
                 }
             }
-            // Check if address fields are filled but no AddressId exists (new address)
             else if (FriendInput.Address.AddressId == null && 
                     (!string.IsNullOrEmpty(FriendInput.Address.StreetAddress) ||
                     !string.IsNullOrEmpty(FriendInput.Address.City) ||
@@ -445,8 +441,6 @@ namespace AppRazor.Pages.Friends.Detailview
             [Required(ErrorMessage = "Author is required")]
             public string editAuthor { get; set; }
 
-            //public List<FriendIM> Friends { get; set; } = new List<FriendIM>();
-
             public QuoteIM() { }
 
             public QuoteIM(QuoteIM original)
@@ -465,8 +459,6 @@ namespace AppRazor.Pages.Friends.Detailview
                 QuoteId = model.QuoteId;
                 QuoteText = editQuoteText = model.QuoteText;
                 Author = editAuthor = model.Author;
-
-                //Friends = model.Friends?.Select(f => new FriendIM(f)).ToList();
             }
 
             public IQuote UpdateModel(IQuote model)
@@ -483,8 +475,6 @@ namespace AppRazor.Pages.Friends.Detailview
                 Quote = this.QuoteText,
                 Author = this.Author
             };
-
-            //public FriendIM NewFriend { get; set; } = new FriendIM();
         }
 
         public class AddressIM
@@ -506,16 +496,6 @@ namespace AppRazor.Pages.Friends.Detailview
             public string? Country { get; set; }
 
             public AddressIM() { }
-
-            /*public AddressIM(AddressIM original)
-            {
-                StatusIM = original.StatusIM;
-                AddressId = original.AddressId;
-                StreetAddress = original.StreetAddress;
-                ZipCode = original.ZipCode;
-                City = original.City;
-                Country = original.Country;
-            }*/
 
             public AddressIM(IAddress model)
             {
@@ -573,15 +553,6 @@ namespace AppRazor.Pages.Friends.Detailview
                 Address = new AddressIM();
             }
         
-
-            /*public FriendIM(FriendIM original)
-            {
-                StatusIM = original.StatusIM;
-                FriendId = original.FriendId;
-                FirstName = original.FirstName;
-                LastName = original.LastName;
-            }*/
-
             public FriendIM(IFriend model)
             {
                 StatusIM = StatusIM.Unchanged;

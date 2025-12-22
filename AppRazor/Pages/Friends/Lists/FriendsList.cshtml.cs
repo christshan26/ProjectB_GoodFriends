@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Models.Interfaces;
-using Services;
 
 namespace AppRazor.Pages.Friends.Lists
 {
