@@ -486,16 +486,17 @@ namespace AppRazor.Pages.Friends.Detailview
             public Guid? AddressId { get; set; }
 
             [Required(ErrorMessage = "Street is required")]
-            public string StreetAddress { get; set; }
+            public string? StreetAddress { get; set; }
 
+            [Required(ErrorMessage = "Zip Code is required")]
             [Range(10101, 100000,ErrorMessage = "Zip Code between 10101 and 100000 is required")]
-            public int ZipCode { get; set; }
+            public int? ZipCode { get; set; }
 
             [Required(ErrorMessage = "City is required")]
-            public string City { get; set; }
+            public string? City { get; set; }
 
             [Required(ErrorMessage = "Country is required")]
-            public string Country { get; set; }
+            public string? Country { get; set; }
 
             public AddressIM() { }
 
@@ -523,7 +524,7 @@ namespace AppRazor.Pages.Friends.Detailview
             {
                 model.AddressId = this.AddressId ?? model.AddressId;
                 model.StreetAddress = this.StreetAddress;
-                model.ZipCode = this.ZipCode;
+                model.ZipCode = this.ZipCode ?? model.ZipCode;
                 model.City = this.City;
                 model.Country = this.Country;
                 return model;
@@ -533,7 +534,7 @@ namespace AppRazor.Pages.Friends.Detailview
             {
                 AddressId = null,
                 StreetAddress = this.StreetAddress,
-                ZipCode = this.ZipCode,
+                ZipCode = this.ZipCode ?? 0,
                 City = this.City,
                 Country = this.Country
             };
@@ -543,6 +544,9 @@ namespace AppRazor.Pages.Friends.Detailview
         {
             public StatusIM StatusIM { get; set; }
             public Guid FriendId { get; set; }
+
+            [BindProperty]
+            public bool IsAddingAddress { get; set; }
 
             [Required(ErrorMessage = "First name is required")]
             public string FirstName { get; set; }

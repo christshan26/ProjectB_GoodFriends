@@ -54,30 +54,38 @@
                         <span asp-validation-for="FriendInput.LastName" class="invalid-feedback"></span>
                     </div>
 
-                    <div class="col-sm-6">
-                        <label for="country" class="form-label">Country</label>
-                        <input type="text" class="form-control" id="country" asp-for="FriendInput.Address.Country">
-                        <span asp-validation-for="FriendInput.Address.Country" class="invalid-feedback"></span>
+                    <div class="form-check mb-3 col-12">
+                        <input type="checkbox" class="form-check-input" id="addAddress" asp-for="FriendInput.IsAddingAddress"/>
+                        <label class="form-check-label" for="addAddress">
+                            Edit Address
+                        </label>
                     </div>
 
-                    <div class="col-sm-6">
-                        <label for="city" class="form-label">City</label>
-                        <input type="text" class="form-control" id="city" asp-for="FriendInput.Address.City">
-                        <span asp-validation-for="FriendInput.Address.City" class="invalid-feedback"></span>
-                    </div>
+                    <div id="addressFields" class="row g-3" style="display: @(Model.FriendInput.IsAddingAddress ? "flex" : "none")">
+                        <div class="col-sm-6">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control" id="country" asp-for="FriendInput.Address.Country">
+                            <span asp-validation-for="FriendInput.Address.Country" class="invalid-feedback"></span>
+                        </div>
 
-                    <div class="col-sm-6">
-                        <label for="street" class="form-label">Street</label>
-                        <input type="text" class="form-control" id="street" asp-for="FriendInput.Address.StreetAddress">
-                        <span asp-validation-for="FriendInput.Address.StreetAddress" class="invalid-feedback"></span>
-                    </div>
+                        <div class="col-sm-6">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" asp-for="FriendInput.Address.City">
+                            <span asp-validation-for="FriendInput.Address.City" class="invalid-feedback"></span>
+                        </div>
 
-                    <div class="col-sm-6">
-                        <label for="zipCode" class="form-label">Zip Code</label>
-                        <input type="number" class="form-control" id="zipCode" asp-for="FriendInput.Address.ZipCode">
-                        <span asp-validation-for="FriendInput.Address.ZipCode" class="invalid-feedback"></span>
-                    </div>
+                        <div class="col-sm-6">
+                            <label for="street" class="form-label">Street</label>
+                            <input type="text" class="form-control" id="street" asp-for="FriendInput.Address.StreetAddress">
+                            <span asp-validation-for="FriendInput.Address.StreetAddress" class="invalid-feedback"></span>
+                        </div>
 
+                        <div class="col-sm-6">
+                            <label for="zipCode" class="form-label">Zip Code</label>
+                            <input type="number" class="form-control" id="zipCode" asp-for="FriendInput.Address.ZipCode">
+                            <span asp-validation-for="FriendInput.Address.ZipCode" class="invalid-feedback"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row g-1">
@@ -161,7 +169,7 @@
                         </div>
                     }
 
-                    <!-- Pet Delete Modal - Outside the loop -->
+                    <!-- Pet Delete Modal -->
                     <div class="modal fade" id="delPetModal" tabindex="-1" aria-labelledby="delPetModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -257,7 +265,7 @@
                         </div>
                     }
 
-                    <!-- Quote Delete Modal - Outside the loop -->
+                    <!-- Quote Delete Modal-->
                     <div class="modal fade" id="delQuoteModal" tabindex="-1" aria-labelledby="delQuoteModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -285,4 +293,34 @@
 @section script
 {
     <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Toggle address fields visibility based on checkbox
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            const addAddressCheckbox = document.getElementById('addAddress');
+            const addressFields = document.getElementById('addressFields');
+            
+            if (addAddressCheckbox && addressFields) 
+            {
+                addAddressCheckbox.addEventListener('change', function() 
+                {
+                    if (this.checked) {
+                        addressFields.style.display = 'flex';
+                    } else {
+                        addressFields.style.display = 'none';
+                    }
+                });
+
+                if (addAddressCheckbox.checked) 
+                {
+                    addressFields.style.display = 'flex';
+                } 
+                else 
+                {
+                    addressFields.style.display = 'none';
+                }
+            }
+        });
+    </script>
 }
