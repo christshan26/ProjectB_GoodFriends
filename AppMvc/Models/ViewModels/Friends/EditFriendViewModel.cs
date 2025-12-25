@@ -3,7 +3,6 @@ using Models.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using AppMvc.SeidoHelpers;
 using System.ComponentModel.DataAnnotations;
 
