@@ -129,14 +129,14 @@ AppMvc/
 └── Models/
     └── ViewModels/
         ├── Home/
-        │   └── IndexViewModel.cs
+        │   └── IndexViewModel.cs DONE
         ├── Admin/
-        │   └── SeedViewModel.cs
+        │   └── SeedViewModel.cs DONE
         └── Friends/
-            ├── FriendsListViewModel.cs
-            ├── FriendDetailsViewModel.cs
-            ├── EditFriendViewModel.cs
-            └── FriendsOverviewViewModel.cs
+            ├── FriendsListViewModel.cs DONE
+            ├── FriendDetailsViewModel.cs DONE
+            ├── EditFriendViewModel.cs DONE
+            └── FriendsOverviewViewModel.cs DONE
 ```
 
 #### Example ViewModel Creation

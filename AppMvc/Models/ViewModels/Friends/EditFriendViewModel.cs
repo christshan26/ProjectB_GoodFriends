@@ -1,7 +1,6 @@
 using Models.Interfaces;
 using Models.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using AppMvc.SeidoHelpers;
 using System.ComponentModel.DataAnnotations;
@@ -11,10 +10,6 @@ namespace AppMvc.Models.ViewModels.Friends
 {
     public class EditFriendViewModel
     {
-        private readonly IFriendsService _friendsService;
-        private readonly IAddressesService _addressesService;
-        private readonly IPetsService _petsService;
-        private readonly IQuotesService _quotesService;
         public IFriend Friend { get; set; }
         public IAddress Address { get; set; }
 
@@ -248,9 +243,5 @@ namespace AppMvc.Models.ViewModels.Friends
         }
         #endregion
 
-        public EditFriendViewModel()
-        {
-            AnimalKind = new List<SelectListItem>();
-        }
     }
 }
