@@ -2,6 +2,9 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using AppMvc.Models;
 using Services.Interfaces;
+using AppMvc.Models.ViewModels.Friends;
+using AppMvc.Models.ViewModels.Home;
+using System.Threading.Tasks;
 
 namespace AppMvc.Controllers;
 
@@ -16,9 +19,25 @@ public class HomeController : Controller
         _adminService = adminService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var vm = new IndexViewModel();
+
+        try
+        {
+            var info =  await _adminService.GuestInfoAsync();
+            vm.AddressCount = info.Item.Db.NrSeededAddresses + info.Item.Db.NrUnseededAddresses;
+            vm.FriendCount = info.Item.Db.NrSeededFriends + info.Item.Db.NrUnseededFriends;
+            vm.PetCount = info.Item.Db.NrSeededPets + info.Item.Db.NrUnseededPets;
+            vm.QuoteCount = info.Item.Db.NrSeededQuotes + info.Item.Db.NrUnseededQuotes;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in guest info retrieval");
+            return StatusCode(500, "Internal server error");
+        }
+
+        return View(vm);
     }
 
     public IActionResult Privacy()
@@ -28,10 +47,10 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Overview()
     {
-        var vm = new OverviewViewModel();
+        var vm = new FriendsOverviewViewModel();
         var info = await _adminService.GuestInfoAsync();
 
-        vm.CountryInfo = info.Item.Friends.Where(f => f.Country == "Norway");
+        vm.CountryInfo = info.Item.Friends.Where(f => f.City == null && f.Country != null);
         return View(vm);
     }
 
