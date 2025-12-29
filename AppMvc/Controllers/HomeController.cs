@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using AppMvc.Models;
 using Services.Interfaces;
-using AppMvc.Models.ViewModels.Friends;
 using AppMvc.Models.ViewModels.Home;
 using System.Threading.Tasks;
 
@@ -43,15 +42,6 @@ public class HomeController : Controller
     public IActionResult Privacy()
     {
         return View();
-    }
-
-    public async Task<IActionResult> Overview()
-    {
-        var vm = new FriendsOverviewViewModel();
-        var info = await _adminService.GuestInfoAsync();
-
-        vm.CountryInfo = info.Item.Friends.Where(f => f.City == null && f.Country != null);
-        return View(vm);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

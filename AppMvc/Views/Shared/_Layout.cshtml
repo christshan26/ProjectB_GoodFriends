@@ -21,7 +21,7 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AppRazor.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppMvc.styles.css" asp-append-version="true" />
     <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="~/css/bootstrap/navbars-offcanvas.css" rel="stylesheet">
     <link href="~/css/bootstrap/features.css" rel="stylesheet">
@@ -39,7 +39,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" aria-label="Main navigation">
             <div class="container-fluid px-3 px-lg-4">
-                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-page="/Index">
+                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">
                     <svg class="bi me-2" width="24" height="24">
                         <use xlink:href="#person-raised-hand" />
                     </svg>
@@ -54,7 +54,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Index" aria-current="page">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" aria-current="page">
                                 <svg class="bi me-1" width="16" height="16">
                                     <use xlink:href="#home" />
                                 </svg>
@@ -68,30 +68,30 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="friendsDropdown">
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Friends/Overviews/FriendsOverview">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Friends" asp-action="FriendsOverview">
                                         Friends Overview
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Friends/Overviews/FriendsAndPetsOverview">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Friends" asp-action="FriendsAndPetsOverview">
                                         Friends & Pets Overview
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Friends/Lists/FriendsList">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Friends" asp-action="List">
                                         Friends List
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Admin/Seed">
+                            <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Seed">
                                 Admin
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Privacy">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
                                 Privacy
                             </a>
                         </li>
@@ -122,13 +122,13 @@
                     <h6 class="text-uppercase fw-bold mb-3">Quick Links</h6>
                     <ul class="list-unstyled">
                         <li class="mb-2">
-                            <a class="text-muted text-decoration-none" asp-area="" asp-page="/Index">Home</a>
+                            <a class="text-muted text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="mb-2">
-                            <a class="text-muted text-decoration-none" asp-area="" asp-page="/Friends/Overviews/FriendsOverview">Friends</a>
+                            <a class="text-muted text-decoration-none" asp-area="" asp-controller="Friends" asp-action="FriendsOverview">Friends</a>
                         </li>
                         <li class="mb-2">
-                            <a class="text-muted text-decoration-none" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="text-muted text-decoration-none" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                 </div>
