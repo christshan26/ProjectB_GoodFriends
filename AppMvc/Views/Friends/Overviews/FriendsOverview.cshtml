@@ -1,0 +1,53 @@
+@model AppMvc.Models.ViewModels.Friends.FriendsOverviewViewModel
+@{
+    ViewData["Title"] = "Friends Overview";
+}
+
+<!-- Hero Section -->
+<section class="mb-5">
+    <div class="bg-body-tertiary p-5 rounded shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-lg-9">
+                <h1 class="display-5 fw-bold text-primary mb-3">Friends per Country</h1>
+                <p class="lead mb-2">
+                    Below you see an overview of the Friends for each country.
+                </p>
+                <p class="text-muted">
+                    Click on any country card to see detailed friend listings for that location.
+                </p>
+            </div>
+            <div class="col-lg-3 d-none d-lg-block text-center">
+                <svg class="bi text-primary" width="120" height="120">
+                    <use xlink:href="#globe2" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Countries Grid -->
+<section class="mb-5">
+    <div class="row g-4">
+        @foreach (var item in Model.CountryInfo)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <svg class="bi text-primary" width="48" height="48">
+                                <use xlink:href="#globe2" />
+                            </svg>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2 text-body-emphasis">@item.Country</h3>
+                        <p class="display-6 text-primary mb-2">@item.NrFriends</p>
+                        <small class="text-muted d-block mb-3">@(item.NrFriends == 1 ? "friend" : "friends")</small>
+                        <a asp-controller="Friends" asp-action="List" asp-route-searchFilter="@item.Country" class="btn btn-outline-primary w-100">
+                            <svg class="bi me-1" width="14" height="14"><use xlink:href="#person-raised-hand" /></svg>
+                            View Friends
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

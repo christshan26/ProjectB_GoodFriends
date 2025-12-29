@@ -17,10 +17,10 @@
                     <small>Created by Christoffer Hansson</small>
                 </p>
                 <div class="d-grid gap-2 d-md-flex mt-4">
-                    <a asp-controller="FriendsController" asp-action="FriendsOverview" class="btn btn-primary btn-lg px-4 me-md-2">
+                    <a asp-controller="Friends" asp-action="List" class="btn btn-primary btn-lg px-4 me-md-2">
                         View Friends
                     </a>
-                    <a asp-controller="AdminController" asp-action="Seed" class="btn btn-outline-secondary btn-lg px-4">
+                    <a asp-controller="Admin" asp-action="Seed" class="btn btn-outline-secondary btn-lg px-4">
                         Admin Panel
                     </a>
                 </div>
@@ -38,7 +38,7 @@
 <section class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="h3 mb-0">Database Overview</h2>
-        <a asp-controller="HomeController" asp-action="Privacy" class="text-decoration-none">
+        <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none">
             <small>View API Documentation</small>
         </a>
     </div>

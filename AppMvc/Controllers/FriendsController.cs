@@ -141,6 +141,133 @@ namespace AppMvc.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Undo(EditFriendViewModel model)
+        {
+            var fr = await _friendsService.ReadFriendAsync(model.FriendInput.FriendId, false);
+            model.FriendInput = new FriendIM(fr.Item);
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAddress(EditFriendViewModel model)
+        {
+            if (model.FriendInput.Address.AddressId != null)
+            {
+                model.FriendInput.Address.StatusIM = StatusIM.Deleted;
+            }
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPet(EditFriendViewModel model)
+        {
+            string[] keys = { "FriendInput.NewPet.Name", "FriendInput.NewPet.Kind" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                model.ValidationResult = validationResult;
+                return View("Edit", model);
+            }
+
+            model.FriendInput.NewPet.StatusIM = StatusIM.Inserted;
+            model.FriendInput.NewPet.PetId = Guid.NewGuid();
+            model.FriendInput.Pets.Add(new PetIM(model.FriendInput.NewPet));
+            model.FriendInput.NewPet = new PetIM();
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPet(Guid petId, EditFriendViewModel model)
+        {
+            int idx = model.FriendInput.Pets.FindIndex(p => p.PetId == petId);
+            string[] keys = { $"FriendInput.Pets[{idx}].editName", $"FriendInput.Pets[{idx}].editKind" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                model.ValidationResult = validationResult;
+                return View("Edit", model);
+            }
+
+            var p = model.FriendInput.Pets.First(p => p.PetId == petId);
+            if (p.StatusIM != StatusIM.Inserted)
+            {
+                p.StatusIM = StatusIM.Modified;
+            }
+
+            p.Name = p.editName;
+            p.Kind = p.editKind;
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePet(Guid petId, EditFriendViewModel model)
+        {
+            var pet = model.FriendInput.Pets.FirstOrDefault(p => p.PetId == petId);
+            if (pet != null)
+            {
+                pet.StatusIM = StatusIM.Deleted;
+            }
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddQuote(EditFriendViewModel model)
+        {
+            string[] keys = { "FriendInput.NewQuote.QuoteText", "FriendInput.NewQuote.Author" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                model.ValidationResult = validationResult;
+                return View("Edit", model);
+            }
+
+            model.FriendInput.NewQuote.StatusIM = StatusIM.Inserted;
+            model.FriendInput.NewQuote.QuoteId = Guid.NewGuid();
+            model.FriendInput.Quotes.Add(new QuoteIM(model.FriendInput.NewQuote));
+            model.FriendInput.NewQuote = new QuoteIM();
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditQuote(Guid quoteId, EditFriendViewModel model)
+        {
+            int idx = model.FriendInput.Quotes.FindIndex(q => q.QuoteId == quoteId);
+            string[] keys = { $"FriendInput.Quotes[{idx}].editQuoteText", $"FriendInput.Quotes[{idx}].editAuthor" };
+
+            if (!ModelState.IsValidPartially(out ModelValidationResult validationResult, keys))
+            {
+                model.ValidationResult = validationResult;
+                return View("Edit", model);
+            }
+
+            var q = model.FriendInput.Quotes.First(q => q.QuoteId == quoteId);
+            if (q.StatusIM != StatusIM.Inserted)
+            {
+                q.StatusIM = StatusIM.Modified;
+            }
+
+            q.QuoteText = q.editQuoteText;
+            q.Author = q.editAuthor;
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteQuote(Guid quoteId, EditFriendViewModel model)
+        {
+            var quote = model.FriendInput.Quotes.FirstOrDefault(q => q.QuoteId == quoteId);
+            if (quote != null)
+            {
+                quote.StatusIM = StatusIM.Deleted;
+            }
+            return View("Edit", model);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Save(EditFriendViewModel model)
         {
             string[] keys = { "FriendInput.FirstName", "FriendInput.LastName" };
@@ -211,6 +338,37 @@ namespace AppMvc.Controllers
             {
                 CountryInfo = info.Item.Friends.Where(f => f.City == null && f.Country != null)
             };
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FriendsAndPetsOverview()
+        {
+            var friendsInfo = await _adminService.GuestInfoAsync();
+            var petsInfo = await _adminService.GuestInfoAsync();
+
+            var vm = new FriendsAndPetsOverviewViewModel
+            {
+                CountryInfo = friendsInfo.Item.Friends.Where(f => f.City == null && f.Country != null),
+                PetsInfo = petsInfo.Item.Pets.Where(p => p.City == null && p.Country != null)
+            };
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FriendsAndPetsCityOverview(string country)
+        {
+            var friendsInfo = await _adminService.GuestInfoAsync();
+            var petsInfo = await _adminService.GuestInfoAsync();
+
+            var vm = new FriendsAndPetsCityOverviewViewModel
+            {
+                CountryInfo = friendsInfo.Item.Friends.Where(f => f.City == null && f.Country == country),
+                CityInfo = friendsInfo.Item.Friends.Where(f => f.City != null && f.Country == country),
+                PetsInfo = petsInfo.Item.Pets.Where(p => p.City != null && p.Country == country)
+            };
+
             return View(vm);
         }
 

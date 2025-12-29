@@ -1,0 +1,71 @@
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model AppMvc.Models.ViewModels.Friends.FriendsAndPetsOverviewViewModel
+@{
+    ViewData["Title"] = "Friends and Pets Overview";
+}
+
+<!-- Hero Section -->
+<section class="mb-5">
+    <div class="bg-body-tertiary p-5 rounded shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-lg-9">
+                <h1 class="display-5 fw-bold text-primary mb-3">Friends and Pets per Country</h1>
+                <p class="lead mb-2">
+                    Below you see an overview of Friends and Pets for each country.
+                </p>
+                <p class="text-muted">
+                    Click on any country card to see the breakdown by city.
+                </p>
+            </div>
+            <div class="col-lg-3 d-none d-lg-block text-center">
+                <svg class="bi text-primary" width="120" height="120">
+                    <use xlink:href="#globe2" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Countries Grid -->
+<section class="mb-5">
+    <div class="row g-4">
+        @foreach (var item in Model.CountryInfo)
+        {
+            var petInfo = Model.PetsInfo?.FirstOrDefault(p => p.Country == item.Country);
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <svg class="bi text-primary" width="48" height="48">
+                                <use xlink:href="#globe2" />
+                            </svg>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3 text-body-emphasis">@item.Country</h3>
+                        
+                        <div class="d-flex justify-content-around mb-3">
+                            <div>
+                                <svg class="bi text-success mb-1" width="24" height="24">
+                                    <use xlink:href="#person-raised-hand" />
+                                </svg>
+                                <p class="h4 text-success mb-0">@item.NrFriends</p>
+                                <small class="text-muted">@(item.NrFriends == 1 ? "friend" : "friends")</small>
+                            </div>
+                            <div>
+                                <svg class="bi text-danger mb-1" width="24" height="24">
+                                    <use xlink:href="#heart-fill" />
+                                </svg>
+                                <p class="h4 text-danger mb-0">@(petInfo?.NrPets ?? 0)</p>
+                                <small class="text-muted">@((petInfo?.NrPets ?? 0) == 1 ? "pet" : "pets")</small>
+                            </div>
+                        </div>
+                        
+                        <a asp-controller="Friends" asp-action="FriendsAndPetsCityOverview" asp-route-country="@item.Country" class="btn btn-outline-primary w-100">
+                            <svg class="bi me-1" width="14" height="14"><use xlink:href="#globe2" /></svg>
+                            View Cities
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
