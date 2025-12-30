@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using AppMvc.Models.ViewModels.Admin;
 using Services.Interfaces;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AppMvc.Controllers
 {

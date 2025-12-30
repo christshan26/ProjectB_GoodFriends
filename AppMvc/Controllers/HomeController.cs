@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using AppMvc.Models;
 using Services.Interfaces;
 using AppMvc.Models.ViewModels.Home;
-using System.Threading.Tasks;
 
 namespace AppMvc.Controllers;
 

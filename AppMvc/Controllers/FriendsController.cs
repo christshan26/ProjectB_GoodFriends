@@ -278,14 +278,12 @@ namespace AppMvc.Controllers
                 return View("Edit", model);
             }
 
-            // Create new friend if this is an insert operation
             if (model.FriendInput.StatusIM == StatusIM.Inserted)
             {
                 var newFr = await _friendsService.CreateFriendAsync(model.FriendInput.CreateCUdto());
                 model.FriendInput.FriendId = newFr.Item.FriendId;
             }
 
-            // Detect address changes even if status is Unchanged
             if (model.FriendInput.Address.StatusIM == StatusIM.Unchanged && model.FriendInput.Address.AddressId != null)
             {
                 var existingFriend = await _friendsService.ReadFriendAsync(model.FriendInput.FriendId, false);
@@ -300,7 +298,6 @@ namespace AppMvc.Controllers
                     }
                 }
             }
-            // Create new address if fields are filled but no AddressId exists
             else if (model.FriendInput.Address.AddressId == null && 
                     (!string.IsNullOrEmpty(model.FriendInput.Address.StreetAddress) ||
                     !string.IsNullOrEmpty(model.FriendInput.Address.City) ||
@@ -311,16 +308,13 @@ namespace AppMvc.Controllers
                 model.FriendInput.Address.AddressId = Guid.NewGuid();
             }
 
-            // Save all related entities
             var fr = await SaveAddress(model.FriendInput);
             fr = await SaveQuotes(model.FriendInput);
             fr = await SavePets(model.FriendInput);
 
-            // Update the friend entity itself
             fr = model.FriendInput.UpdateModel(fr);
             await _friendsService.UpdateFriendAsync(new FriendCuDto(fr));
 
-            // Redirect based on operation type
             if (model.FriendInput.StatusIM == StatusIM.Inserted)
             {
                 return RedirectToAction("List");
