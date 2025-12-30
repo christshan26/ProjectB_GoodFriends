@@ -83,7 +83,7 @@ namespace AppMvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var friend = await _friendsService.ReadFriendAsync(id, true);
+            var friend = await _friendsService.ReadFriendAsync(id, false);
 
             var vm = new FriendsDetailsViewModel
             {

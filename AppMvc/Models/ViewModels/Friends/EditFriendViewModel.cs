@@ -60,8 +60,8 @@ namespace AppMvc.Models.ViewModels.Friends
             {
                 StatusIM = StatusIM.Unchanged;
                 PetId = model.PetId;
-                Name = model.Name;
-                Kind = model.Kind;
+                Name = editName = model.Name;
+                Kind = editKind = model.Kind;
             }
 
             public IPet UpdateModel(IPet model)
