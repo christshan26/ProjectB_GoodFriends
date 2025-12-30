@@ -4,7 +4,6 @@
     ViewData["Title"] = "Friends and Pets per City";
 }
 
-<!-- Breadcrumb Navigation -->
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
@@ -13,7 +12,6 @@
     </ol>
 </nav>
 
-<!-- Hero Section -->
 <section class="mb-5">
     <div class="bg-body-tertiary p-5 rounded shadow-sm">
         <div class="row align-items-center">
@@ -38,7 +36,6 @@
     </div>
 </section>
 
-<!-- Cities Grid -->
 <section class="mb-5">
     <div class="row g-4">
         @foreach (var item in Model.CityInfo.Where(c => c.Country == Model.CountryInfo.FirstOrDefault()?.Country))

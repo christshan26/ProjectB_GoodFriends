@@ -45,7 +45,6 @@ namespace AppRazor.Pages.Friends.Lists
 
         private void UpdatePagination(int nrOfItems)
         {
-            //Pagination
             NrOfPages = (int)Math.Ceiling((double)nrOfItems / PageSize);
             PrevPageNr = Math.Max(0, ThisPageNr - 1);
             NextPageNr = Math.Min(NrOfPages - 1, ThisPageNr + 1);
